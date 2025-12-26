@@ -76,13 +76,10 @@ function createUserAgentItem(ua, activeId) {
   
   const modeText = ua.mode === 'append' ? ` ${chrome.i18n.getMessage('appendMode')}` : '';
   
-  // For default user-agent, show the actual browser user-agent
-  let preview;
-  if (ua.id === 'default') {
-    preview = navigator.userAgent;
-  } else {
-    preview = ua.userAgent ? ua.userAgent.substring(0, 50) + '...' : chrome.i18n.getMessage('defaultUserAgentPreview');
-  }
+  // For default user-agent, show translated message instead of actual UA
+  const preview = ua.id === 'default' 
+    ? chrome.i18n.getMessage('defaultUserAgentPreview')
+    : (ua.userAgent ? ua.userAgent.substring(0, 50) + '...' : chrome.i18n.getMessage('defaultUserAgentPreview'));
   
   // Badge colors
   const badgeTextColor = ua.badgeTextColor || '#ffffff';
