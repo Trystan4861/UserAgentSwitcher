@@ -201,5 +201,32 @@
   },
   "aboutDescription": {
     "message": "Información sobre la extensión User-Agent Changer."
+  },
+  "labelDomain": {
+    "message": "Dominio:"
+  },
+  "placeholderDomain": {
+    "message": "ejemplo.com o *.ejemplo.com"
+  },
+  "domainHint": {
+    "message": "Puedes usar comodines como *.ejemplo.com para coincidir con todos los subdominios"
+  },
+  "labelSelectUserAgent": {
+    "message": "Seleccionar User-Agent:"
+  },
+  "selectUserAgentOption": {
+    "message": "-- Selecciona un User-Agent --"
+  },
+  "userAgentPreview": {
+    "message": "Vista previa del User-Agent:"
+  },
+  "addSpoofButton": {
+    "message": "Agregar Spoof Permanente"
+  },
+  "configuredPermanentSpoofs": {
+    "message": "Spoofs Permanentes Configurados"
+  },
+  "editButton": {
+    "message": "Editar"
   }
 }

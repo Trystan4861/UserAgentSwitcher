@@ -545,3 +545,103 @@ section h2 {
 .list-section::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Permanent Spoof List Styles */
+.permanent-spoofs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spoof-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.spoof-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: #1a73e8;
+}
+
+.spoof-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.spoof-domain {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a73e8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spoof-domain::before {
+  content: '🌐';
+  font-size: 20px;
+}
+
+.spoof-info {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.spoof-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.spoof-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.spoof-info-label {
+  font-weight: 600;
+  color: #5f6368;
+  min-width: 100px;
+}
+
+.spoof-ua-name {
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+.spoof-preview {
+  margin-top: 12px;
+}
+
+.spoof-preview label {
+  font-weight: 600;
+  color: #5f6368;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.empty-spoofs {
+  text-align: center;
+  padding: 40px 20px;
+  color: #5f6368;
+}
+
+.empty-spoofs::before {
+  content: '📌';
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.section-description {
+  color: #5f6368;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}

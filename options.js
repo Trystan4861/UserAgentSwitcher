@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await initializeUserAgents();
   await updateDefaultUserAgentTranslation();
   await loadUserAgents();
+  await loadPermanentSpoofs();
   await setupLanguageSelector();
   await setupNavigationMenu();
   setupEventListeners();
@@ -166,6 +167,12 @@ function setupEventListeners() {
   
   // Update preview when alias changes
   document.getElementById('alias').addEventListener('input', updateBadgePreview);
+  
+  // Permanent Spoof form submission
+  const spoofForm = document.getElementById('addPermanentSpoofForm');
+  if (spoofForm) {
+    spoofForm.addEventListener('submit', addPermanentSpoof);
+  }
   
   // Initial preview
   updateBadgePreview();
@@ -417,3 +424,156 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+// Permanent Spoof List Functions
+async function loadPermanentSpoofs() {
+  const result = await chrome.storage.local.get(['permanentSpoofs', 'userAgents']);
+  const spoofs = result.permanentSpoofs || [];
+  const userAgents = result.userAgents || getDefaultUserAgents();
+  
+  const listContainer = document.getElementById('permanentSpoofsList');
+  if (!listContainer) return;
+  
+  listContainer.innerHTML = '';
+  
+  if (spoofs.length === 0) {
+    listContainer.innerHTML = `
+      <div class="empty-spoofs">
+        <p>No hay spoofs permanentes configurados</p>
+        <small>Usa el formulario de arriba para agregar uno</small>
+      </div>
+    `;
+    return;
+  }
+  
+  spoofs.forEach(spoof => {
+    const ua = userAgents.find(u => u.id === spoof.userAgentId);
+    if (!ua) return;
+    
+    const card = createSpoofCard(spoof, ua);
+    listContainer.appendChild(card);
+  });
+  
+  setupUserAgentSelector(userAgents);
+}
+
+function setupUserAgentSelector(userAgents) {
+  const select = document.getElementById('spoofUserAgent');
+  if (!select) return;
+  
+  select.innerHTML = `<option value="">${i18n.getMessage('selectUserAgentOption')}</option>`;
+  
+  userAgents.forEach(ua => {
+    if (ua.id !== 'default') {
+      const option = document.createElement('option');
+      option.value = ua.id;
+      option.textContent = ua.name;
+      select.appendChild(option);
+    }
+  });
+  
+  select.addEventListener('change', updateSpoofPreview);
+}
+
+function updateSpoofPreview() {
+  const select = document.getElementById('spoofUserAgent');
+  const preview = document.getElementById('spoofPreview');
+  
+  if (!select || !preview) return;
+  
+  const selectedId = select.value;
+  
+  if (!selectedId) {
+    preview.style.display = 'none';
+    return;
+  }
+  
+  chrome.storage.local.get('userAgents').then(result => {
+    const userAgents = result.userAgents || [];
+    const ua = userAgents.find(u => u.id === selectedId);
+    
+    if (ua) {
+      preview.style.display = 'block';
+      preview.querySelector('.user-agent-preview').textContent = ua.userAgent;
+    }
+  });
+}
+
+function createSpoofCard(spoof, ua) {
+  const card = document.createElement('div');
+  card.className = 'spoof-card';
+  
+  card.innerHTML = `
+    <div class="spoof-header">
+      <div class="spoof-domain">${spoof.domain}</div>
+      <div class="card-actions">
+        <button class="btn btn-danger" data-id="${spoof.id}">🗑️ ${i18n.getMessage('deleteButton')}</button>
+      </div>
+    </div>
+    <div class="spoof-info">
+      <div class="spoof-info-row">
+        <span class="spoof-info-label">${i18n.getMessage('labelSelectUserAgent')}</span>
+        <span class="spoof-ua-name">${ua.name}</span>
+      </div>
+    </div>
+    <div class="spoof-preview">
+      <label>${i18n.getMessage('userAgentPreview')}</label>
+      <div class="user-agent-preview">${ua.userAgent}</div>
+    </div>
+  `;
+  
+  const deleteBtn = card.querySelector('.btn-danger');
+  deleteBtn.addEventListener('click', () => deletePermanentSpoof(spoof.id));
+  
+  return card;
+}
+
+async function addPermanentSpoof(e) {
+  e.preventDefault();
+  
+  const domain = document.getElementById('spoofDomain').value.trim();
+  const userAgentId = document.getElementById('spoofUserAgent').value;
+  
+  if (!domain || !userAgentId) {
+    alert(i18n.getMessage('fillAllFields'));
+    return;
+  }
+  
+  const result = await chrome.storage.local.get('permanentSpoofs');
+  const spoofs = result.permanentSpoofs || [];
+  
+  if (spoofs.some(s => s.domain === domain)) {
+    alert('Este dominio ya tiene un spoof configurado');
+    return;
+  }
+  
+  const newSpoof = {
+    id: Date.now().toString(),
+    domain,
+    userAgentId
+  };
+  
+  spoofs.push(newSpoof);
+  await chrome.storage.local.set({ permanentSpoofs: spoofs });
+  
+  document.getElementById('addPermanentSpoofForm').reset();
+  document.getElementById('spoofPreview').style.display = 'none';
+  
+  await loadPermanentSpoofs();
+  showNotification('Spoof permanente agregado correctamente', 'success');
+}
+
+async function deletePermanentSpoof(id) {
+  if (!confirm('¿Estás seguro de que quieres eliminar este spoof permanente?')) {
+    return;
+  }
+  
+  const result = await chrome.storage.local.get('permanentSpoofs');
+  let spoofs = result.permanentSpoofs || [];
+  
+  spoofs = spoofs.filter(s => s.id !== id);
+  await chrome.storage.local.set({ permanentSpoofs: spoofs });
+  
+  await loadPermanentSpoofs();
+  showNotification('Spoof permanente eliminado correctamente', 'success');
+}

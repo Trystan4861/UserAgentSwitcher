@@ -201,5 +201,32 @@
   },
   "aboutDescription": {
     "message": "Information about User-Agent Changer extension."
+  },
+  "labelDomain": {
+    "message": "Domain:"
+  },
+  "placeholderDomain": {
+    "message": "example.com or *.example.com"
+  },
+  "domainHint": {
+    "message": "You can use wildcards like *.example.com to match all subdomains"
+  },
+  "labelSelectUserAgent": {
+    "message": "Select User-Agent:"
+  },
+  "selectUserAgentOption": {
+    "message": "-- Select a User-Agent --"
+  },
+  "userAgentPreview": {
+    "message": "User-Agent Preview:"
+  },
+  "addSpoofButton": {
+    "message": "Add Permanent Spoof"
+  },
+  "configuredPermanentSpoofs": {
+    "message": "Configured Permanent Spoofs"
+  },
+  "editButton": {
+    "message": "Edit"
   }
 }

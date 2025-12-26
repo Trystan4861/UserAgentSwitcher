@@ -115,9 +115,43 @@
 
         <!-- Section 2: Permanent Spoof List -->
         <div id="permanent-spoof-list" class="content-section">
-          <h2 data-i18n="permanentSpoofTitle">Permanent Spoof List</h2>
-          <p data-i18n="permanentSpoofDescription">Configure permanent User-Agent spoofs for specific domains.</p>
-          <!-- Content will be added in future tasks -->
+          <div class="content">
+            <section class="form-section">
+              <h2 data-i18n="permanentSpoofTitle">Permanent Spoof List</h2>
+              <p class="section-description" data-i18n="permanentSpoofDescription">Configure permanent User-Agent spoofs for specific domains.</p>
+              
+              <form id="addPermanentSpoofForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="spoofDomain" data-i18n="labelDomain">Domain:</label>
+                    <input type="text" id="spoofDomain" data-i18n-placeholder="placeholderDomain" placeholder="example.com or *.example.com" required>
+                    <small data-i18n="domainHint">You can use wildcards like *.example.com to match all subdomains</small>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="spoofUserAgent" data-i18n="labelSelectUserAgent">Select User-Agent:</label>
+                    <select id="spoofUserAgent" required>
+                      <option value="" data-i18n="selectUserAgentOption">-- Select a User-Agent --</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="spoof-preview" id="spoofPreviewContainer" style="display: none;">
+                  <label data-i18n="userAgentPreview">User-Agent Preview:</label>
+                  <div class="user-agent-preview" id="spoofPreview"></div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                  <span data-i18n="addSpoofButton">Add Permanent Spoof</span>
+                </button>
+              </form>
+            </section>
+
+            <section class="list-section">
+              <h2 data-i18n="configuredPermanentSpoofs">Configured Permanent Spoofs</h2>
+              <div id="permanentSpoofsList" class="permanent-spoofs-list"></div>
+            </section>
+          </div>
         </div>
 
         <!-- Section 3: Import/Export Settings -->
