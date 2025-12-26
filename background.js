@@ -185,15 +185,28 @@ updateBadge();
 
 /**
  * Convert domain pattern to URL pattern for declarativeNetRequest
- * Supports wildcards like *.example.com
- * @param {string} domain - Domain pattern (e.g., "google.com" or "*.amazon.com")
+ * Supports wildcards like *.example.com and specific paths like localhost/core/*
+ * @param {string} domain - Domain pattern (e.g., "google.com", "*.amazon.com", or "localhost/core/*")
  * @returns {string} - URL pattern for declarativeNetRequest
  */
 function getDomainPattern(domain) {
   // Remove protocol if present
   domain = domain.replace(/^https?:\/\//, '');
   
-  // Remove trailing slash
+  // Check if domain contains a path (has a slash after the domain part)
+  const hasPath = domain.includes('/');
+  
+  if (hasPath) {
+    // Handle paths like "localhost/core/*" or "example.com/api/*"
+    // Keep the path as-is, just add protocol
+    if (!domain.endsWith('*')) {
+      // If path doesn't end with *, add /* to match everything under that path
+      domain = domain.endsWith('/') ? domain + '*' : domain + '/*';
+    }
+    return `*://${domain}`;
+  }
+  
+  // Remove trailing slash for domain-only patterns
   domain = domain.replace(/\/$/, '');
   
   // Handle wildcard subdomain
@@ -204,8 +217,7 @@ function getDomainPattern(domain) {
     // *example.com -> *://*example.com/*
     return `*://${domain}/*`;
   } else {
-    // example.com -> *://example.com/* and *://*.example.com/*
-    // We'll return just the main pattern; caller should handle subdomains if needed
+    // example.com -> *://example.com/*
     return `*://${domain}/*`;
   }
 }
@@ -323,8 +335,8 @@ async function updatePermanentSpoofRules() {
       
       newRules.push(rule);
       
-      // Also add rule for subdomains if not already a wildcard
-      if (!spoof.domain.includes('*')) {
+      // Also add rule for subdomains if not already a wildcard and doesn't have a path
+      if (!spoof.domain.includes('*') && !spoof.domain.includes('/')) {
         const subdomainPattern = `*://*.${spoof.domain}/*`;
         newRules.push({
           ...rule,

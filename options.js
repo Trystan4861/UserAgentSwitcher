@@ -461,42 +461,53 @@ function setupUserAgentSelector(userAgents) {
   const select = document.getElementById('spoofUserAgent');
   if (!select) return;
   
-  select.innerHTML = `<option value="">${i18n.getMessage('selectUserAgentOption')}</option>`;
+  // Clear previous options
+  select.innerHTML = '';
   
+  // Add default option
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.textContent = i18n.getMessage('selectUserAgentOption') || '-- Selecciona un User-Agent --';
+  select.appendChild(defaultOption);
+  
+  // Add all user agents (except default)
   userAgents.forEach(ua => {
     if (ua.id !== 'default') {
       const option = document.createElement('option');
       option.value = ua.id;
-      option.textContent = ua.name;
+      option.textContent = `${ua.name} (${ua.alias})`;
       select.appendChild(option);
     }
   });
   
-  select.addEventListener('change', updateSpoofPreview);
+  // Remove old listeners and add new one
+  const newSelect = select.cloneNode(true);
+  select.parentNode.replaceChild(newSelect, select);
+  newSelect.addEventListener('change', updateSpoofPreview);
 }
 
-function updateSpoofPreview() {
+async function updateSpoofPreview() {
   const select = document.getElementById('spoofUserAgent');
+  const previewContainer = document.getElementById('spoofPreviewContainer');
   const preview = document.getElementById('spoofPreview');
   
-  if (!select || !preview) return;
+  if (!select || !previewContainer || !preview) return;
   
   const selectedId = select.value;
   
   if (!selectedId) {
-    preview.style.display = 'none';
+    previewContainer.style.display = 'none';
     return;
   }
   
-  chrome.storage.local.get('userAgents').then(result => {
-    const userAgents = result.userAgents || [];
-    const ua = userAgents.find(u => u.id === selectedId);
-    
-    if (ua) {
-      preview.style.display = 'block';
-      preview.querySelector('.user-agent-preview').textContent = ua.userAgent;
-    }
-  });
+  const result = await chrome.storage.local.get('userAgents');
+  const userAgents = result.userAgents || [];
+  const ua = userAgents.find(u => u.id === selectedId);
+  
+  if (ua) {
+    previewContainer.style.display = 'block';
+    preview.textContent = ua.userAgent;
+  }
 }
 
 function createSpoofCard(spoof, ua) {
@@ -550,7 +561,8 @@ async function addPermanentSpoof(e) {
   const newSpoof = {
     id: Date.now().toString(),
     domain,
-    userAgentId
+    userAgentId,
+    enabled: true
   };
   
   spoofs.push(newSpoof);
