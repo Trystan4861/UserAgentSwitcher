@@ -162,5 +162,44 @@
   "badgeTextColorNote": {
     "message": "Text color is automatically determined by Chrome",
     "description": "Note about badge text color"
+  },
+  "menuCustomUserAgents": {
+    "message": "Custom User-Agents"
+  },
+  "menuPermanentSpoofs": {
+    "message": "Permanent Spoof List"
+  },
+  "menuImportExport": {
+    "message": "Import/Export"
+  },
+  "menuOtherSettings": {
+    "message": "Other Settings"
+  },
+  "menuAbout": {
+    "message": "About"
+  },
+  "permanentSpoofTitle": {
+    "message": "Permanent Spoof List"
+  },
+  "permanentSpoofDescription": {
+    "message": "Configure permanent User-Agent spoofs for specific domains."
+  },
+  "importExportTitle": {
+    "message": "Import/Export Settings"
+  },
+  "importExportDescription": {
+    "message": "Backup and restore your settings."
+  },
+  "otherSettingsTitle": {
+    "message": "Other Settings"
+  },
+  "otherSettingsDescription": {
+    "message": "Configure advanced extension options."
+  },
+  "aboutTitle": {
+    "message": "About"
+  },
+  "aboutDescription": {
+    "message": "Information about User-Agent Changer extension."
   }
 }

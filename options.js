@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await updateDefaultUserAgentTranslation();
   await loadUserAgents();
   await setupLanguageSelector();
+  await setupNavigationMenu();
   setupEventListeners();
 });
 
@@ -88,6 +89,53 @@ async function setupLanguageSelector() {
     setTimeout(() => {
       window.location.reload();
     }, 1500);
+  });
+}
+
+// Setup navigation menu
+async function setupNavigationMenu() {
+  const menuItems = document.querySelectorAll('.menu-item');
+  
+  // Load last active section or default to 'custom-user-agents'
+  const result = await chrome.storage.local.get('activeSection');
+  const activeSection = result.activeSection || 'custom-user-agents';
+  
+  // Show the active section
+  showSection(activeSection);
+  
+  // Add click listeners to menu items
+  menuItems.forEach(item => {
+    item.addEventListener('click', async () => {
+      const sectionId = item.getAttribute('data-section');
+      showSection(sectionId);
+      
+      // Save the active section
+      await chrome.storage.local.set({ activeSection: sectionId });
+    });
+  });
+}
+
+// Show a specific section and hide others
+function showSection(sectionId) {
+  // Hide all sections
+  const sections = document.querySelectorAll('.content-section');
+  sections.forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Show the selected section
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.classList.add('active');
+  }
+  
+  // Update menu active state
+  const menuItems = document.querySelectorAll('.menu-item');
+  menuItems.forEach(item => {
+    item.classList.remove('active');
+    if (item.getAttribute('data-section') === sectionId) {
+      item.classList.add('active');
+    }
   });
 }
 

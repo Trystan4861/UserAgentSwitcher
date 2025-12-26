@@ -13,9 +13,140 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
+}
+
+/* Main Layout with Navigation Menu */
+.main-layout {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* Navigation Menu */
+.navigation-menu {
+  flex-shrink: 0;
+  width: 250px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 16px 0;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  user-select: none;
+}
+
+.menu-item:hover {
+  background: #f8f9fa;
+}
+
+.menu-item.active {
+  background: #e8f0fe;
+  border-left-color: #1a73e8;
+}
+
+.menu-item.active .menu-text {
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+.menu-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.menu-text {
+  font-size: 14px;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.content-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments for menu */
+@media (max-width: 1024px) {
+  .main-layout {
+    flex-direction: column;
+  }
+  
+  .navigation-menu {
+    width: 100%;
+    position: static;
+  }
+  
+  .menu-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 0 8px;
+  }
+  
+  .menu-item {
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    min-width: 100px;
+    text-align: center;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .menu-item.active {
+    border-left-color: transparent;
+    border-bottom-color: #1a73e8;
+  }
+  
+  .menu-icon {
+    font-size: 24px;
+  }
+  
+  .menu-text {
+    font-size: 12px;
+    white-space: nowrap;
+  }
 }
 
 header {

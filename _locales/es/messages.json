@@ -162,5 +162,44 @@
   "badgeTextColorNote": {
     "message": "El color del texto es determinado automáticamente por Chrome",
     "description": "Nota sobre el color del texto de la insignia"
+  },
+  "menuCustomUserAgents": {
+    "message": "Lista de Agentes Usuario"
+  },
+  "menuPermanentSpoofs": {
+    "message": "Agentes por Dominio"
+  },
+  "menuImportExport": {
+    "message": "Importar/Exportar"
+  },
+  "menuOtherSettings": {
+    "message": "Otras Configuraciones"
+  },
+  "menuAbout": {
+    "message": "Acerca de"
+  },
+  "permanentSpoofTitle": {
+    "message": "Permanent Spoof List"
+  },
+  "permanentSpoofDescription": {
+    "message": "Configura User-Agents permanentes para dominios específicos."
+  },
+  "importExportTitle": {
+    "message": "Importar/Exportar Configuración"
+  },
+  "importExportDescription": {
+    "message": "Realiza copias de seguridad y restaura tu configuración."
+  },
+  "otherSettingsTitle": {
+    "message": "Otras Configuraciones"
+  },
+  "otherSettingsDescription": {
+    "message": "Configura opciones avanzadas de la extensión."
+  },
+  "aboutTitle": {
+    "message": "Acerca de"
+  },
+  "aboutDescription": {
+    "message": "Información sobre la extensión User-Agent Changer."
   }
 }

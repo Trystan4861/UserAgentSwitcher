@@ -24,7 +24,38 @@
       </div>
     </header>
 
-    <div class="content">
+    <div class="main-layout">
+      <!-- Navigation Menu -->
+      <nav class="navigation-menu">
+        <ul class="menu-list">
+          <li class="menu-item active" data-section="custom-user-agents">
+            <span class="menu-icon">🌐</span>
+            <span class="menu-text" data-i18n="menuCustomUserAgents">Custom User-Agents</span>
+          </li>
+          <li class="menu-item" data-section="permanent-spoof-list">
+            <span class="menu-icon">📌</span>
+            <span class="menu-text" data-i18n="menuPermanentSpoofs">Permanent Spoof List</span>
+          </li>
+          <li class="menu-item" data-section="import-export">
+            <span class="menu-icon">💾</span>
+            <span class="menu-text" data-i18n="menuImportExport">Import/Export Settings</span>
+          </li>
+          <li class="menu-item" data-section="other-settings">
+            <span class="menu-icon">⚙️</span>
+            <span class="menu-text" data-i18n="menuOtherSettings">Other Settings</span>
+          </li>
+          <li class="menu-item" data-section="about">
+            <span class="menu-icon">ℹ️</span>
+            <span class="menu-text" data-i18n="menuAbout">About</span>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Content Sections -->
+      <div class="content-wrapper">
+        <!-- Section 1: Custom User-Agents (current functionality) -->
+        <div id="custom-user-agents" class="content-section active">
+          <div class="content">
       <section class="form-section">
         <h2 data-i18n="addNewUserAgent">Agregar nuevo User-Agent</h2>
         <form id="addUserAgentForm">
@@ -79,6 +110,37 @@
         <h2 data-i18n="configuredUserAgents">User-Agents configurados</h2>
         <div id="userAgentsList" class="user-agents-list"></div>
       </section>
+          </div>
+        </div>
+
+        <!-- Section 2: Permanent Spoof List -->
+        <div id="permanent-spoof-list" class="content-section">
+          <h2 data-i18n="permanentSpoofTitle">Permanent Spoof List</h2>
+          <p data-i18n="permanentSpoofDescription">Configure permanent User-Agent spoofs for specific domains.</p>
+          <!-- Content will be added in future tasks -->
+        </div>
+
+        <!-- Section 3: Import/Export Settings -->
+        <div id="import-export" class="content-section">
+          <h2 data-i18n="importExportTitle">Import/Export Settings</h2>
+          <p data-i18n="importExportDescription">Backup and restore your settings.</p>
+          <!-- Content will be added in future tasks -->
+        </div>
+
+        <!-- Section 4: Other Settings -->
+        <div id="other-settings" class="content-section">
+          <h2 data-i18n="otherSettingsTitle">Other Settings</h2>
+          <p data-i18n="otherSettingsDescription">Configure advanced extension options.</p>
+          <!-- Content will be added in future tasks -->
+        </div>
+
+        <!-- Section 5: About -->
+        <div id="about" class="content-section">
+          <h2 data-i18n="aboutTitle">About</h2>
+          <p data-i18n="aboutDescription">Information about User-Agent Changer extension.</p>
+          <!-- Content will be added in future tasks -->
+        </div>
+      </div>
     </div>
   </div>
 
