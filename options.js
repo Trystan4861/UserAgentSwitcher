@@ -207,7 +207,7 @@ function createUserAgentCard(ua) {
   const modeInfoRow = ua.id === 'default' ? '' : `
     <div class="info-row">
       <span class="info-label">${i18n.getMessage('modeLabel')}</span>
-      <span class="info-value">${modeText}</span>
+      <span class="mode-badge ${modeClass}">${modeText}</span>
     </div>
   `;
   

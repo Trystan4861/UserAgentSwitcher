@@ -52,12 +52,20 @@
     "description": "Label for mode field"
   },
   "modeReplace": {
-    "message": "Replace complete",
+    "message": "Replace",
     "description": "Replace mode option"
   },
   "modeAppend": {
-    "message": "Append to end",
+    "message": "Append",
     "description": "Append mode option"
+  },
+  "modeReplaceDescription": {
+    "message": "Replace User-Agent",
+    "description": "Replace mode full description"
+  },
+  "modeAppendDescription": {
+    "message": "Append to User-Agent",
+    "description": "Append mode full description"
   },
   "labelUserAgentString": {
     "message": "User-Agent String:",

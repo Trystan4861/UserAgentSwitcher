@@ -52,12 +52,20 @@
     "description": "Etiqueta para el campo modo"
   },
   "modeReplace": {
-    "message": "Reemplazar completo",
+    "message": "Reemplazar",
     "description": "Opción de modo reemplazar"
   },
   "modeAppend": {
-    "message": "Agregar al final",
+    "message": "Agregar",
     "description": "Opción de modo agregar"
+  },
+  "modeReplaceDescription": {
+    "message": "Reemplazar User-Agent",
+    "description": "Descripción completa del modo reemplazar"
+  },
+  "modeAppendDescription": {
+    "message": "Agregar al User-Agent",
+    "description": "Descripción completa del modo agregar"
   },
   "labelUserAgentString": {
     "message": "User-Agent String:",
