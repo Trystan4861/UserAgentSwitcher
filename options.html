@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User-Agent Changer - Configuración</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚙️ User-Agent Changer - Configuración</h1>
+      <p class="subtitle">Gestiona tus User-Agents personalizados</p>
+    </header>
+
+    <div class="content">
+      <section class="form-section">
+        <h2>Agregar nuevo User-Agent</h2>
+        <form id="addUserAgentForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Nombre:</label>
+              <input type="text" id="name" placeholder="e.g., iPhone 14 Pro" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="alias">Alias (para badge):</label>
+              <input type="text" id="alias" maxlength="4" placeholder="e.g., iOS" required>
+              <small>Máximo 4 caracteres</small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="mode">Modo:</label>
+              <select id="mode">
+                <option value="replace">Reemplazar completo</option>
+                <option value="append">Agregar al final</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="userAgent">User-Agent String:</label>
+            <textarea id="userAgent" rows="3" placeholder="Mozilla/5.0..." required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="badgeTextColor">Color de texto del badge:</label>
+              <div class="color-input-group">
+                <input type="color" id="badgeTextColor" value="#ffffff">
+                <input type="text" id="badgeTextColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="badgeBgColor">Color de fondo del badge:</label>
+              <div class="color-input-group">
+                <input type="color" id="badgeBgColor" value="#1a73e8">
+                <input type="text" id="badgeBgColorHex" value="#1a73e8" maxlength="7" placeholder="#1a73e8">
+              </div>
+            </div>
+          </div>
+
+          <div class="badge-preview">
+            <span>Vista previa del badge:</span>
+            <div id="badgePreview" class="preview-badge">TEST</div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">
+            <span>➕</span> Agregar User-Agent
+          </button>
+        </form>
+      </section>
+
+      <section class="list-section">
+        <h2>User-Agents configurados</h2>
+        <div id="userAgentsList" class="user-agents-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

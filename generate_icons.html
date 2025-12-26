@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Icons from Logo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin: 10px;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .icon-container {
+            text-align: center;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1557b0;
+        }
+        .main-button {
+            font-size: 18px;
+            padding: 15px 30px;
+            margin-top: 20px;
+        }
+        #status {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            background: #e3f2fd;
+            border-left: 4px solid #1a73e8;
+        }
+        .error {
+            background: #ffebee !important;
+            border-left-color: #f44336 !important;
+        }
+        .success {
+            background: #e8f5e9 !important;
+            border-left-color: #4caf50 !important;
+        }
+        h1 {
+            color: #1a73e8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Generador de Iconos - User-Agent Changer</h1>
+    <div id="status">Cargando logo.png...</div>
+    
+    <p><strong>Instrucciones:</strong></p>
+    <ul>
+        <li>El script cargará automáticamente <code>icons/logo.png</code></li>
+        <li>Generará iconos en 4 tamaños: 16x16, 32x32, 48x48 y 128x128 píxeles</li>
+        <li>Haz clic en los botones de descarga para guardar cada icono</li>
+        <li>O usa el botón "Descargar Todos" para descargarlos de una vez</li>
+    </ul>
+    
+    <button class="main-button" onclick="downloadAll()">📥 Descargar Todos los Iconos</button>
+    
+    <div class="container" id="container"></div>
+
+    <script>
+        let sourceImage = null;
+        const sizes = [16, 32, 48, 128, 256];
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = type;
+        }
+        
+        function loadSourceImage() {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    sourceImage = img;
+                    updateStatus(`✓ Logo cargado exitosamente: ${img.width}x${img.height} píxeles`, 'success');
+                    resolve(img);
+                };
+                img.onerror = () => {
+                    updateStatus('✗ Error: No se pudo cargar icons/logo.png. Asegúrate de que el archivo existe.', 'error');
+                    reject(new Error('No se pudo cargar el logo'));
+                };
+                img.src = 'icons/logo.png';
+            });
+        }
+        
+        function createIcon(size) {
+            if (!sourceImage) {
+                console.error('No hay imagen fuente cargada');
+                return null;
+            }
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Habilitar suavizado para mejor calidad
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            
+            // Dibujar la imagen redimensionada
+            ctx.drawImage(sourceImage, 0, 0, size, size);
+            
+            return canvas;
+        }
+        
+        function generateAll() {
+            const container = document.getElementById('container');
+            container.innerHTML = '';
+            
+            sizes.forEach(size => {
+                const div = document.createElement('div');
+                div.className = 'icon-container';
+                
+                const canvas = createIcon(size);
+                if (!canvas) return;
+                
+                canvas.id = `icon${size}`;
+                
+                const label = document.createElement('p');
+                label.innerHTML = `<strong>icon${size}.png</strong><br>${size}x${size} píxeles`;
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = `⬇️ Descargar`;
+                downloadBtn.onclick = () => downloadIcon(canvas, `icon${size}.png`);
+                
+                div.appendChild(canvas);
+                div.appendChild(label);
+                div.appendChild(downloadBtn);
+                container.appendChild(div);
+            });
+            
+            updateStatus('✓ Todos los iconos generados. Usa los botones de descarga para guardarlos.', 'success');
+        }
+        
+        function downloadIcon(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        function downloadAll() {
+            sizes.forEach((size, index) => {
+                setTimeout(() => {
+                    const canvas = document.getElementById(`icon${size}`);
+                    if (canvas) {
+                        downloadIcon(canvas, `icon${size}.png`);
+                    }
+                }, index * 500); // Delay de 500ms entre descargas
+            });
+            updateStatus('⬇️ Descargando todos los iconos...', 'info');
+        }
+        
+        // Inicializar al cargar la página
+        window.onload = async () => {
+            try {
+                await loadSourceImage();
+                generateAll();
+            } catch (error) {
+                console.error('Error al inicializar:', error);
+            }
+        };
+    </script>
+</body>
+</html>
