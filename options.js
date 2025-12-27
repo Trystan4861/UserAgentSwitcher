@@ -253,9 +253,7 @@ function createUserAgentCard(ua) {
   } else {
     preview = ua.userAgent ? ua.userAgent : i18n.getMessage('defaultUserAgentPreview');
   }
-  
-  const defaultTag = ua.id === 'default' ? `<span class="default-tag">${i18n.getMessage('defaultTag')}</span>` : '';
-  
+    
   // Badge colors
   const badgeTextColor = ua.badgeTextColor || '#ffffff';
   const badgeBgColor = ua.badgeBgColor || '#1a73e8';
@@ -265,7 +263,7 @@ function createUserAgentCard(ua) {
   // For default user-agent, don't show badge or badge colors info
   const badgeSection = ua.id === 'default' ? '' : `
     <div class="card-title">
-      <h3>${ua.name}${defaultTag}</h3>
+      <h3>${ua.name}</h3>
       <div class="card-badge" style="color: ${badgeTextColor}; background-color: ${badgeBgColor};">
         ${ua.alias}
       </div>
@@ -274,7 +272,7 @@ function createUserAgentCard(ua) {
   
   const defaultBadgeSection = ua.id === 'default' ? `
     <div class="card-title">
-      <h3>${ua.name}${defaultTag}</h3>
+      <h3>${ua.name}</h3>
     </div>
   ` : '';
   

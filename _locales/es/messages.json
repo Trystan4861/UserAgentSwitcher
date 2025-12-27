@@ -103,10 +103,6 @@
     "message": "Eliminar",
     "description": "Botón para eliminar"
   },
-  "defaultTag": {
-    "message": "POR DEFECTO",
-    "description": "Etiqueta para user-agent por defecto"
-  },
   "modeLabel": {
     "message": "Modo:",
     "description": "Etiqueta para mostrar modo"
@@ -124,7 +120,7 @@
     "description": "Etiqueta para fondo"
   },
   "defaultUserAgent": {
-    "message": "Por defecto (Chrome)",
+    "message": "Por defecto",
     "description": "Nombre del user-agent por defecto"
   },
   "defaultUserAgentPreview": {

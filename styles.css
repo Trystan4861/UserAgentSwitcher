@@ -50,7 +50,7 @@ body {
 }
 
 .user-agents-list {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .user-agent-item {
@@ -163,7 +163,22 @@ body {
   max-height: 600px;
   overflow-y: auto;
 }
+#manageBtn{
+  width: -webkit-fill-available;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+}
+#manageBtn:hover {
+  background: #e8f0fe;
+  border-color: #1a73e8;
 
+}
 .hidden {
   display: none !important;
 }
@@ -291,6 +306,9 @@ body {
 .mode-append {
   background: #e6f4ea;
   color: #137333;
+}
+footer{
+  display: grid;
 }
 .footer-credit {
   margin-top: 12px;

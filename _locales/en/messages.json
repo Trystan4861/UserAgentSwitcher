@@ -103,10 +103,6 @@
     "message": "Delete",
     "description": "Delete button"
   },
-  "defaultTag": {
-    "message": "DEFAULT",
-    "description": "Tag for default user-agent"
-  },
   "modeLabel": {
     "message": "Mode:",
     "description": "Label for displaying mode"
@@ -124,7 +120,7 @@
     "description": "Label for background"
   },
   "defaultUserAgent": {
-    "message": "Default (Chrome)",
+    "message": "Default",
     "description": "Default user-agent name"
   },
   "defaultUserAgentPreview": {

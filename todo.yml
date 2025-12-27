@@ -8,7 +8,7 @@ project_info:
   created: 2025-12-26
   status: in-progress
   author: trystan4861
-  next_task_to_start: 9
+  next_task_to_start: 10
   last_updated: 2025-12-27
 
 
@@ -16,7 +16,7 @@ notes: |
   - Todas las tareas deben mantener el estilo visual actual de la extensión
   - Las tareas se deben completar en el orden indicado, respetando dependencias
   - Tras realizar una tarea se debe indicar "tarea realizada" al usuario y esperar validación de la misma
-  - Una vez recibida validación de la tarea, proceder a crear el commit de la misma siguiendo las consideraciones descritas a continuación
+  - Una vez recibida validación de la tarea, marcarla como realizada en este archivoproceder a crear el commit de la misma siguiendo las consideraciones descritas a continuación
   - Los commits deben seguir la convención de mensajes de commit (tipo: descripción breve)
     - Ejemplo: {ICONO} {ACTION}: {DESCRIPTION}
       - ICONO: 🎨 (estilo), 🐛 (bug), ✨ (nueva funcionalidad), 🔥 (eliminación), 📝 (documentación), etc.
