@@ -216,9 +216,61 @@
 
         <!-- Section 4: Other Settings -->
         <div id="other-settings" class="content-section">
-          <h2 data-i18n="otherSettingsTitle">Other Settings</h2>
-          <p data-i18n="otherSettingsDescription">Configure advanced extension options.</p>
-          <!-- Content will be added in future tasks -->
+          <div class="content">
+            <section class="settings-section">
+              <h2 data-i18n="otherSettingsTitle">Other Settings</h2>
+              <p class="section-description" data-i18n="otherSettingsDescription">Configure advanced extension options.</p>
+              
+              <!-- Permanent Override Setting -->
+              <div class="setting-item">
+                <div class="setting-header">
+                  <label class="setting-label">
+                    <input type="checkbox" id="permanentOverride" class="setting-checkbox">
+                    <span class="setting-title" data-i18n="permanentOverrideTitle">Permanent spoofs always override any user-agent selection in the toolbar</span>
+                  </label>
+                </div>
+                <p class="setting-description" data-i18n="permanentOverrideDescription">
+                  By default, any user-agent you select in Chrome's toolbar takes precedence over any permanent spoofs you have set up. 
+                  By selecting this option, your permanent spoofs always take precedence over any selection in the toolbar.
+                </p>
+              </div>
+
+              <!-- Per-Tab Spoof Setting -->
+              <div class="setting-item">
+                <div class="setting-header">
+                  <label class="setting-label">
+                    <input type="checkbox" id="perTabSpoof" class="setting-checkbox">
+                    <span class="setting-title" data-i18n="perTabSpoofTitle">Set user-agent spoof per tab</span>
+                  </label>
+                </div>
+                <p class="setting-description" data-i18n="perTabSpoofDescription">
+                  When setting your user-agent spoof on the fly in the toolbar, the user-agent you choose will only apply to the current tab. 
+                  This allows you to have multiple tabs spoofing different user-agents at once.
+                </p>
+              </div>
+
+              <!-- Reset Extension Setting -->
+              <div class="setting-item danger-zone">
+                <div class="setting-header">
+                  <h3 class="danger-title">
+                    <span class="danger-icon">⚠️</span>
+                    <span data-i18n="dangerZoneTitle">Danger Zone</span>
+                  </h3>
+                </div>
+                <div class="reset-section">
+                  <div class="reset-info">
+                    <h4 data-i18n="resetExtensionTitle">Reset extension</h4>
+                    <p class="setting-description" data-i18n="resetExtensionDescription">
+                      Clears out all settings, removing all user-agents and all permanent spoofs, as if you had just installed the extension.
+                    </p>
+                  </div>
+                  <button id="resetExtensionBtn" class="btn btn-danger">
+                    <span data-i18n="resetButton">Reset</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
 
         <!-- Section 5: About -->

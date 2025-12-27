@@ -354,5 +354,38 @@
   },
   "noDataToImport": {
     "message": "No data to import"
+  },
+  "permanentOverrideTitle": {
+    "message": "Permanent spoofs always override any user-agent selection in the toolbar"
+  },
+  "permanentOverrideDescription": {
+    "message": "By default, any user-agent you select in Chrome's toolbar takes precedence over any permanent spoofs you have set up. By selecting this option, your permanent spoofs always take precedence over any selection in the toolbar."
+  },
+  "perTabSpoofTitle": {
+    "message": "Set user-agent spoof per tab"
+  },
+  "perTabSpoofDescription": {
+    "message": "When setting your user-agent spoof on the fly in the toolbar, the user-agent you choose will only apply to the current tab. This allows you to have multiple tabs spoofing different user-agents at once."
+  },
+  "dangerZoneTitle": {
+    "message": "Danger Zone"
+  },
+  "resetExtensionTitle": {
+    "message": "Reset extension"
+  },
+  "resetExtensionDescription": {
+    "message": "Clears out all settings, removing all user-agents and all permanent spoofs, as if you had just installed the extension."
+  },
+  "resetButton": {
+    "message": "Reset"
+  },
+  "confirmReset": {
+    "message": "Are you sure you want to reset the extension? This action CANNOT be undone and you will lose all your settings, user-agents, and permanent spoofs."
+  },
+  "resetSuccess": {
+    "message": "Extension reset successfully. Default settings will be reloaded."
+  },
+  "resetCancelled": {
+    "message": "Reset cancelled"
   }
 }

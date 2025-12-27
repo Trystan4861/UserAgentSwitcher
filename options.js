@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await setupLanguageSelector();
   await setupNavigationMenu();
   await setupImportExport();
+  await setupOtherSettings();
   setupEventListeners();
 });
 
@@ -1145,7 +1146,7 @@ async function confirmImport() {
 
 async function exportSettings() {
   try {
-    const result = await chrome.storage.local.get(['userAgents', 'permanentSpoofs', 'activeSection']);
+    const result = await chrome.storage.local.get(['userAgents', 'permanentSpoofs', 'activeSection', 'permanentOverride', 'perTabSpoof']);
     
     const manifest = chrome.runtime.getManifest();
     
@@ -1158,7 +1159,9 @@ async function exportSettings() {
       userAgents: userAgentsToExport,
       permanentSpoofs: result.permanentSpoofs || [],
       settings: {
-        activeSection: result.activeSection || 'custom-user-agents'
+        activeSection: result.activeSection || 'custom-user-agents',
+        permanentOverride: result.permanentOverride || false,
+        perTabSpoof: result.perTabSpoof || false
       }
     };
     
@@ -1180,5 +1183,82 @@ async function exportSettings() {
   } catch (error) {
     console.error('Export error:', error);
     alert('Error al exportar la configuración');
+  }
+}
+
+// Other Settings Functions
+async function setupOtherSettings() {
+  const permanentOverrideCheckbox = document.getElementById('permanentOverride');
+  const perTabSpoofCheckbox = document.getElementById('perTabSpoof');
+  const resetExtensionBtn = document.getElementById('resetExtensionBtn');
+  
+  if (!permanentOverrideCheckbox || !perTabSpoofCheckbox || !resetExtensionBtn) return;
+  
+  // Load current settings
+  const result = await chrome.storage.local.get(['permanentOverride', 'perTabSpoof']);
+  
+  permanentOverrideCheckbox.checked = result.permanentOverride || false;
+  perTabSpoofCheckbox.checked = result.perTabSpoof || false;
+  
+  // Add event listeners
+  permanentOverrideCheckbox.addEventListener('change', async (e) => {
+    await chrome.storage.local.set({ permanentOverride: e.target.checked });
+    showNotification(
+      e.target.checked 
+        ? 'Spoofs permanentes ahora tienen prioridad'
+        : 'Selección de toolbar tiene prioridad', 
+      'success'
+    );
+  });
+  
+  perTabSpoofCheckbox.addEventListener('change', async (e) => {
+    await chrome.storage.local.set({ perTabSpoof: e.target.checked });
+    showNotification(
+      e.target.checked 
+        ? 'Spoof por pestaña activado'
+        : 'Spoof global activado', 
+      'success'
+    );
+  });
+  
+  resetExtensionBtn.addEventListener('click', resetExtension);
+}
+
+async function resetExtension() {
+  const confirmMsg = i18n.getMessage('confirmReset') || 
+    '¿Estás seguro de que quieres resetear la extensión? Esta acción NO se puede deshacer y perderás todas tus configuraciones, user-agents y spoofs permanentes.';
+  
+  if (!confirm(confirmMsg)) {
+    showNotification(i18n.getMessage('resetCancelled') || 'Reseteo cancelado', 'info');
+    return;
+  }
+  
+  try {
+    // Clear all storage
+    await chrome.storage.local.clear();
+    
+    // Reinitialize with defaults
+    await chrome.storage.local.set({
+      userAgents: getDefaultUserAgents(),
+      activeId: 'default',
+      permanentSpoofs: [],
+      permanentOverride: false,
+      perTabSpoof: false,
+      activeSection: 'custom-user-agents'
+    });
+    
+    // Reset badge
+    await chrome.action.setBadgeText({ text: '' });
+    
+    // Reload the page
+    showNotification(i18n.getMessage('resetSuccess') || 'Extensión reseteada correctamente. Se recargarán las configuraciones por defecto.', 'success');
+    
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+    
+  } catch (error) {
+    console.error('Reset error:', error);
+    showNotification('Error al resetear la extensión', 'error');
   }
 }

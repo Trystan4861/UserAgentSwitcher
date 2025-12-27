@@ -354,5 +354,38 @@
   },
   "noDataToImport": {
     "message": "No hay datos para importar"
+  },
+  "permanentOverrideTitle": {
+    "message": "Los spoofs permanentes siempre tienen prioridad sobre la selección de user-agent en la barra de herramientas"
+  },
+  "permanentOverrideDescription": {
+    "message": "Por defecto, cualquier user-agent que selecciones en la barra de herramientas de Chrome tiene precedencia sobre cualquier spoof permanente que hayas configurado. Al activar esta opción, tus spoofs permanentes siempre tendrán precedencia sobre cualquier selección en la barra de herramientas."
+  },
+  "perTabSpoofTitle": {
+    "message": "Configurar spoof de user-agent por pestaña"
+  },
+  "perTabSpoofDescription": {
+    "message": "Al configurar tu spoof de user-agent sobre la marcha en la barra de herramientas, el user-agent que elijas solo se aplicará a la pestaña actual. Esto te permite tener múltiples pestañas con diferentes user-agents a la vez."
+  },
+  "dangerZoneTitle": {
+    "message": "Zona de Peligro"
+  },
+  "resetExtensionTitle": {
+    "message": "Resetear extensión"
+  },
+  "resetExtensionDescription": {
+    "message": "Elimina todas las configuraciones, borrando todos los user-agents y todos los spoofs permanentes, como si acabaras de instalar la extensión."
+  },
+  "resetButton": {
+    "message": "Resetear"
+  },
+  "confirmReset": {
+    "message": "¿Estás seguro de que quieres resetear la extensión? Esta acción NO se puede deshacer y perderás todas tus configuraciones, user-agents y spoofs permanentes."
+  },
+  "resetSuccess": {
+    "message": "Extensión reseteada correctamente. Se recargarán las configuraciones por defecto."
+  },
+  "resetCancelled": {
+    "message": "Reseteo cancelado"
   }
 }
