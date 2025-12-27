@@ -228,5 +228,86 @@
   },
   "editButton": {
     "message": "Edit"
+  },
+  "importTitle": {
+    "message": "Import Settings"
+  },
+  "importDescription": {
+    "message": "Select a JSON file to import your settings."
+  },
+  "exportTitle": {
+    "message": "Export Settings"
+  },
+  "exportDescription": {
+    "message": "Download your current settings as a JSON file."
+  },
+  "exportButton": {
+    "message": "Export Settings"
+  },
+  "importModeLabel": {
+    "message": "Import mode:"
+  },
+  "importModeReplace": {
+    "message": "Replace all"
+  },
+  "importModeMerge": {
+    "message": "Merge (keep existing)"
+  },
+  "importModeUserAgentsOnly": {
+    "message": "User-Agents only"
+  },
+  "importModeSpoofOnly": {
+    "message": "Permanent Spoofs only"
+  },
+  "importModeReplaceDesc": {
+    "message": "Replace all settings with the file's content"
+  },
+  "importModeMergeDesc": {
+    "message": "Add new items without removing existing ones"
+  },
+  "importModeUserAgentsOnlyDesc": {
+    "message": "Import only the User-Agents list"
+  },
+  "importModeSpoofOnlyDesc": {
+    "message": "Import only the Permanent Spoofs"
+  },
+  "dragDropText": {
+    "message": "Drag and drop a JSON file here"
+  },
+  "orText": {
+    "message": "or"
+  },
+  "selectFileButton": {
+    "message": "Select File"
+  },
+  "confirmImportButton": {
+    "message": "Confirm Import"
+  },
+  "versionLabel": {
+    "message": "Version"
+  },
+  "exportDateLabel": {
+    "message": "Export Date"
+  },
+  "userAgentsCountLabel": {
+    "message": "User-Agents"
+  },
+  "permanentSpoofCountLabel": {
+    "message": "Permanent Spoofs"
+  },
+  "importSuccess": {
+    "message": "Settings imported successfully"
+  },
+  "exportSuccess": {
+    "message": "Settings exported successfully"
+  },
+  "invalidFileType": {
+    "message": "Please select a valid JSON file"
+  },
+  "importErrorInvalidFormat": {
+    "message": "The file does not have a valid format"
+  },
+  "importErrorReadFile": {
+    "message": "Error reading the file. Make sure it's a valid JSON."
   }
 }

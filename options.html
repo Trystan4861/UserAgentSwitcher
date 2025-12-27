@@ -156,9 +156,83 @@
 
         <!-- Section 3: Import/Export Settings -->
         <div id="import-export" class="content-section">
-          <h2 data-i18n="importExportTitle">Import/Export Settings</h2>
-          <p data-i18n="importExportDescription">Backup and restore your settings.</p>
-          <!-- Content will be added in future tasks -->
+          <div class="content">
+            <section class="form-section">
+              <h2 data-i18n="importTitle">Import Settings</h2>
+              <p class="section-description" data-i18n="importDescription">Import user-agent strings from a local JSON file.</p>
+              
+              <div class="import-section">
+                <div class="file-input-wrapper" id="drop-area">
+                  <input type="file" id="importFile" accept=".json" class="file-input" style="display: none;">
+                  <label for="importFile" class="file-input-label">
+                    <span class="file-icon">📁</span>
+                    <span data-i18n="selectFileButton">Seleccionar archivo o arrastra y suelta aquí</span>
+                  </label>
+                  <span id="selectedFileName" class="selected-file-name"></span>
+                </div>
+                <div id="drop-feedback" class="drop-feedback" style="display: none;">Arrastrar y soltar archivo aquí</div>
+                
+                <div id="importPreview" class="import-preview" style="display: none;">
+                  <h3 data-i18n="importPreviewTitle">Import Preview</h3>
+                  <div id="importPreviewContent" class="import-preview-content"></div>
+                  
+                  <div class="import-options">
+                    <h4 data-i18n="importOptionsTitle">Import Options</h4>
+                    <label class="radio-option">
+                      <input type="radio" name="importMode" value="replace" checked>
+                      <span data-i18n="importModeReplace">Replace all existing settings</span>
+                    </label>
+                    <label class="radio-option">
+                      <input type="radio" name="importMode" value="merge">
+                      <span data-i18n="importModeMerge">Merge with existing settings</span>
+                    </label>
+                    <label class="radio-option">
+                      <input type="radio" name="importMode" value="userAgentsOnly">
+                      <span data-i18n="importModeUserAgents">Import only User-Agents</span>
+                    </label>
+                    <label class="radio-option">
+                      <input type="radio" name="importMode" value="spoofOnly">
+                      <span data-i18n="importModeSpoofs">Import only Permanent Spoofs</span>
+                    </label>
+                  </div>
+                  
+                  <button id="confirmImportBtn" class="btn btn-primary">
+                    <span data-i18n="confirmImportButton">Confirm Import</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="list-section">
+              <h2 data-i18n="exportTitle">Export Settings</h2>
+              <p class="section-description" data-i18n="exportDescription">Export settings to a JSON file.</p>
+              
+              <div class="export-section">
+                <div class="export-info">
+                  <div class="info-card">
+                    <span class="info-icon">📦</span>
+                    <div class="info-content">
+                      <h4 data-i18n="exportInfoTitle">What will be exported?</h4>
+                      <ul class="export-list">
+                        <li data-i18n="exportItemUserAgents">• Custom User-Agents</li>
+                        <li data-i18n="exportItemSpoofs">• Permanent Spoof List</li>
+                        <li data-i18n="exportItemSettings">• Extension Settings</li>
+                        <li data-i18n="exportItemMetadata">• Export metadata</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div class="export-actions">
+                    <button id="exportBtn" class="btn btn-primary export-btn">
+                      <span class="btn-icon">⬇️</span>
+                      <span data-i18n="exportButton">Click Here To Download</span>
+                    </button>
+                    <small class="export-hint" data-i18n="exportHint">The file will be saved with a timestamp.</small>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
 
         <!-- Section 4: Other Settings -->

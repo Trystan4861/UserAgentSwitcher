@@ -36,6 +36,9 @@ chrome.runtime.onInstalled.addListener(async () => {
   // Load the active user-agent and update badge
   await updateBadge();
   
+  // Initialize permanent spoofs first
+  await initializePermanentSpoofs();
+  
   // Get the current active user-agent and apply it
   const result = await chrome.storage.local.get(['userAgents', 'activeId']);
   if (result.userAgents && result.activeId) {
@@ -176,6 +179,13 @@ async function updateBadge() {
   }
 }
 
+// Initialize on browser startup (not just on install)
+chrome.runtime.onStartup.addListener(async () => {
+  console.log('Extension starting up...');
+  await updateBadge();
+  await initializePermanentSpoofs();
+});
+
 // Initialize badge on startup
 updateBadge();
 
@@ -192,6 +202,12 @@ updateBadge();
 function getDomainPattern(domain) {
   // Remove protocol if present
   domain = domain.replace(/^https?:\/\//, '');
+  
+  // Remove www. prefix if present (we'll match both www and non-www)
+  const hasWww = domain.startsWith('www.');
+  if (hasWww) {
+    domain = domain.substring(4); // Remove 'www.'
+  }
   
   // Check if domain contains a path (has a slash after the domain part)
   const hasPath = domain.includes('/');
@@ -217,8 +233,8 @@ function getDomainPattern(domain) {
     // *example.com -> *://*example.com/*
     return `*://${domain}/*`;
   } else {
-    // example.com -> *://example.com/*
-    return `*://${domain}/*`;
+    // example.com -> *://*.example.com/* (match all subdomains including www and bare domain)
+    return `*://*${domain}/*`;
   }
 }
 
@@ -278,6 +294,7 @@ async function updatePermanentSpoofRules() {
     // Create new rules for active permanent spoofs
     const newRules = [];
     let ruleId = 1000; // Start IDs at 1000 for permanent spoofs
+    console.log("Starting rule ID generation");
     
     for (const spoof of permanentSpoofs) {
       if (!spoof.enabled) {
@@ -294,8 +311,6 @@ async function updatePermanentSpoofRules() {
       const urlPattern = getDomainPattern(spoof.domain);
       
       // Determine priority based on settings
-      // If permanentOverride is true, permanent spoofs have higher priority (3)
-      // Otherwise, they have lower priority (1) so manual selection takes precedence
       const priority = settings.permanentOverride ? 3 : 1;
       
       const rule = {
@@ -332,21 +347,9 @@ async function updatePermanentSpoofRules() {
           ]
         }
       };
-      
+
+      console.log(`Generated rule ID: ${rule.id}`);
       newRules.push(rule);
-      
-      // Also add rule for subdomains if not already a wildcard and doesn't have a path
-      if (!spoof.domain.includes('*') && !spoof.domain.includes('/')) {
-        const subdomainPattern = `*://*.${spoof.domain}/*`;
-        newRules.push({
-          ...rule,
-          id: ruleId++,
-          condition: {
-            ...rule.condition,
-            urlFilter: subdomainPattern
-          }
-        });
-      }
     }
     
     // Add new permanent spoof rules

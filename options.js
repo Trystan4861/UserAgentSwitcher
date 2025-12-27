@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPermanentSpoofs();
   await setupLanguageSelector();
   await setupNavigationMenu();
+  await setupImportExport();
   setupEventListeners();
 });
 
@@ -200,6 +201,8 @@ function updateBadgePreview() {
 async function loadUserAgents() {
   const result = await chrome.storage.local.get('userAgents');
   const userAgents = result.userAgents || getDefaultUserAgents();
+  
+  setupUserAgentSelector(userAgents);
   
   const listContainer = document.getElementById('userAgentsList');
   listContainer.innerHTML = '';
@@ -430,12 +433,12 @@ async function loadPermanentSpoofs() {
   const result = await chrome.storage.local.get(['permanentSpoofs', 'userAgents']);
   const spoofs = result.permanentSpoofs || [];
   const userAgents = result.userAgents || getDefaultUserAgents();
-  
+
   const listContainer = document.getElementById('permanentSpoofsList');
   if (!listContainer) return;
-  
+
   listContainer.innerHTML = '';
-  
+
   if (spoofs.length === 0) {
     listContainer.innerHTML = `
       <div class="empty-spoofs">
@@ -445,31 +448,31 @@ async function loadPermanentSpoofs() {
     `;
     return;
   }
-  
+
   spoofs.forEach(spoof => {
     const ua = userAgents.find(u => u.id === spoof.userAgentId);
     if (!ua) return;
-    
+
     const card = createSpoofCard(spoof, ua);
     listContainer.appendChild(card);
   });
-  
+
   setupUserAgentSelector(userAgents);
 }
 
 function setupUserAgentSelector(userAgents) {
   const select = document.getElementById('spoofUserAgent');
   if (!select) return;
-  
+
   // Clear previous options
   select.innerHTML = '';
-  
+
   // Add default option
   const defaultOption = document.createElement('option');
   defaultOption.value = '';
   defaultOption.textContent = i18n.getMessage('selectUserAgentOption') || '-- Selecciona un User-Agent --';
   select.appendChild(defaultOption);
-  
+
   // Add all user agents (except default)
   userAgents.forEach(ua => {
     if (ua.id !== 'default') {
@@ -479,7 +482,7 @@ function setupUserAgentSelector(userAgents) {
       select.appendChild(option);
     }
   });
-  
+
   // Remove old listeners and add new one
   const newSelect = select.cloneNode(true);
   select.parentNode.replaceChild(newSelect, select);
@@ -490,20 +493,20 @@ async function updateSpoofPreview() {
   const select = document.getElementById('spoofUserAgent');
   const previewContainer = document.getElementById('spoofPreviewContainer');
   const preview = document.getElementById('spoofPreview');
-  
+
   if (!select || !previewContainer || !preview) return;
-  
+
   const selectedId = select.value;
-  
+
   if (!selectedId) {
     previewContainer.style.display = 'none';
     return;
   }
-  
+
   const result = await chrome.storage.local.get('userAgents');
   const userAgents = result.userAgents || [];
   const ua = userAgents.find(u => u.id === selectedId);
-  
+
   if (ua) {
     previewContainer.style.display = 'block';
     preview.textContent = ua.userAgent;
@@ -588,4 +591,298 @@ async function deletePermanentSpoof(id) {
   
   await loadPermanentSpoofs();
   showNotification('Spoof permanente eliminado correctamente', 'success');
+}
+
+// Import/Export Functions
+async function setupImportExport() {
+  const importFile = document.getElementById('importFile');
+  const exportBtn = document.getElementById('exportBtn');
+  const confirmImportBtn = document.getElementById('confirmImportBtn');
+  const dropArea = document.getElementById('drop-area');
+  const selectedFileName = document.getElementById('selectedFileName');
+  
+  if (!importFile || !exportBtn) return;
+  
+  // Setup drag and drop
+  dropArea.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropArea.classList.add('drag-over');
+  });
+
+  dropArea.addEventListener('dragleave', () => {
+    dropArea.classList.remove('drag-over');
+  });
+
+  dropArea.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dropArea.classList.remove('drag-over');
+    
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      if (file.type === 'application/json') {
+        selectedFileName.textContent = file.name;
+        handleFileImport(file);
+      } else {
+        alert(i18n.getMessage('invalidFileType'));
+      }
+    }
+  });
+  
+  // File selection handler
+  importFile.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    selectedFileName.textContent = file.name;
+    
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      
+      // Validate and show preview
+      if (validateImportData(data)) {
+        showImportPreview(data);
+      } else {
+        showImportError('El archivo no tiene un formato válido');
+        importFile.value = '';
+        selectedFileName.textContent = '';
+      }
+    } catch (error) {
+      showImportError('Error al leer el archivo. Asegúrate de que sea un JSON válido.');
+      importFile.value = '';
+      selectedFileName.textContent = '';
+    }
+  });
+  
+  // Export button handler
+  exportBtn.addEventListener('click', exportSettings);
+  
+  // Confirm import button handler
+  if (confirmImportBtn) {
+    confirmImportBtn.addEventListener('click', confirmImport);
+  }
+}
+
+// Handle file import (from drag-and-drop or file selection)
+async function handleFileImport(file) {
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    try {
+      const data = JSON.parse(event.target.result);
+      if (validateImportData(data)) {
+        showImportPreview(data);
+      } else {
+        showImportError(i18n.getMessage('importErrorInvalidFormat'));
+      }
+    } catch (error) {
+      showImportError(i18n.getMessage('importErrorReadFile'));
+    }
+  };
+  reader.readAsText(file);
+}
+
+function validateImportData(data) {
+  // Check basic structure
+  if (!data || typeof data !== 'object') return false;
+  
+  // At least one of these should exist
+  if (!data.userAgents && !data.permanentSpoofs) return false;
+  
+  // Validate userAgents if present
+  if (data.userAgents) {
+    if (!Array.isArray(data.userAgents)) return false;
+    
+    for (const ua of data.userAgents) {
+      if (!ua.id || !ua.name || !ua.alias) return false;
+      if (ua.mode && !['replace', 'append'].includes(ua.mode)) return false;
+    }
+  }
+  
+  // Validate permanentSpoofs if present
+  if (data.permanentSpoofs) {
+    if (!Array.isArray(data.permanentSpoofs)) return false;
+    
+    for (const spoof of data.permanentSpoofs) {
+      if (!spoof.id || !spoof.domain || !spoof.userAgentId) return false;
+    }
+  }
+  
+  return true;
+}
+
+function showImportPreview(data) {
+  const previewContainer = document.getElementById('importPreview');
+  const previewContent = document.getElementById('importPreviewContent');
+  
+  if (!previewContainer || !previewContent) return;
+  
+  // Count items
+  const userAgentsCount = data.userAgents ? data.userAgents.length : 0;
+  const spoofCount = data.permanentSpoofs ? data.permanentSpoofs.length : 0;
+  const version = data.version || 'Unknown';
+  const exportDate = data.exportDate ? new Date(data.exportDate).toLocaleString() : 'Unknown';
+  
+  previewContent.innerHTML = `
+    <div class="preview-item">
+      <span class="preview-label">${i18n.getMessage('versionLabel') || 'Version'}:</span>
+      <span class="preview-value">${version}</span>
+    </div>
+    <div class="preview-item">
+      <span class="preview-label">${i18n.getMessage('exportDateLabel') || 'Export Date'}:</span>
+      <span class="preview-value">${exportDate}</span>
+    </div>
+    <div class="preview-item">
+      <span class="preview-label">${i18n.getMessage('userAgentsCountLabel') || 'User-Agents'}:</span>
+      <span class="preview-value">${userAgentsCount}</span>
+    </div>
+    <div class="preview-item">
+      <span class="preview-label">${i18n.getMessage('permanentSpoofCountLabel') || 'Permanent Spoofs'}:</span>
+      <span class="preview-value">${spoofCount}</span>
+    </div>
+  `;
+  
+  previewContainer.style.display = 'block';
+  
+  // Store data for import
+  previewContainer.dataset.importData = JSON.stringify(data);
+}
+
+function showImportError(message) {
+  const previewContainer = document.getElementById('importPreview');
+  const previewContent = document.getElementById('importPreviewContent');
+  
+  if (!previewContainer || !previewContent) return;
+  
+  previewContent.innerHTML = `
+    <div class="import-error">
+      ${message}
+    </div>
+  `;
+  
+  previewContainer.style.display = 'block';
+  
+  setTimeout(() => {
+    previewContainer.style.display = 'none';
+  }, 5000);
+}
+
+async function confirmImport() {
+  const previewContainer = document.getElementById('importPreview');
+  const importData = JSON.parse(previewContainer.dataset.importData || '{}');
+  const importFile = document.getElementById('importFile');
+  const selectedFileName = document.getElementById('selectedFileName');
+  
+  // Get selected import mode
+  const importMode = document.querySelector('input[name="importMode"]:checked').value;
+  
+  try {
+    const result = await chrome.storage.local.get(['userAgents', 'permanentSpoofs']);
+    let existingUserAgents = result.userAgents || getDefaultUserAgents();
+    let existingSpoofs = result.permanentSpoofs || [];
+    
+    let newUserAgents = existingUserAgents;
+    let newSpoofs = existingSpoofs;
+    
+    switch (importMode) {
+      case 'replace':
+        // Replace everything
+        newUserAgents = importData.userAgents || getDefaultUserAgents();
+        newSpoofs = importData.permanentSpoofs || [];
+        break;
+        
+      case 'merge':
+        // Merge: add new items, skip duplicates
+        if (importData.userAgents) {
+          const existingIds = new Set(existingUserAgents.map(ua => ua.id));
+          const toAdd = importData.userAgents.filter(ua => !existingIds.has(ua.id));
+          newUserAgents = [...existingUserAgents, ...toAdd];
+        }
+        
+        if (importData.permanentSpoofs) {
+          const existingDomains = new Set(existingSpoofs.map(s => s.domain));
+          const toAdd = importData.permanentSpoofs.filter(s => !existingDomains.has(s.domain));
+          newSpoofs = [...existingSpoofs, ...toAdd];
+        }
+        break;
+        
+      case 'userAgentsOnly':
+        // Only import user agents
+        if (importData.userAgents) {
+          newUserAgents = importData.userAgents;
+        }
+        break;
+        
+      case 'spoofOnly':
+        // Only import permanent spoofs
+        if (importData.permanentSpoofs) {
+          newSpoofs = importData.permanentSpoofs;
+        }
+        break;
+    }
+    
+    // Ensure default user agent exists
+    if (!newUserAgents.find(ua => ua.id === 'default')) {
+      newUserAgents.unshift(getDefaultUserAgents()[0]);
+    }
+    
+    // Save to storage
+    await chrome.storage.local.set({
+      userAgents: newUserAgents,
+      permanentSpoofs: newSpoofs
+    });
+    
+    // Reload UI
+    await loadUserAgents();
+    await loadPermanentSpoofs();
+    
+    // Reset form
+    importFile.value = '';
+    selectedFileName.textContent = '';
+    previewContainer.style.display = 'none';
+    
+    // Show success message
+    showNotification(i18n.getMessage('importSuccess') || 'Configuración importada correctamente', 'success');
+    
+  } catch (error) {
+    console.error('Import error:', error);
+    showImportError('Error al importar la configuración');
+  }
+}
+
+async function exportSettings() {
+  try {
+    const result = await chrome.storage.local.get(['userAgents', 'permanentSpoofs', 'activeSection']);
+    
+    const manifest = chrome.runtime.getManifest();
+    
+    const exportData = {
+      version: manifest.version,
+      exportDate: new Date().toISOString(),
+      userAgents: result.userAgents || getDefaultUserAgents(),
+      permanentSpoofs: result.permanentSpoofs || [],
+      settings: {
+        activeSection: result.activeSection || 'custom-user-agents'
+      }
+    };
+    
+    // Create JSON blob
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    // Create download link
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `useragent-changer-settings-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showNotification(i18n.getMessage('exportSuccess') || 'Configuración exportada correctamente', 'success');
+    
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('Error al exportar la configuración');
+  }
 }

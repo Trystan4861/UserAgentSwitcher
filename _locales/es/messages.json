@@ -228,5 +228,86 @@
   },
   "editButton": {
     "message": "Editar"
+  },
+  "importTitle": {
+    "message": "Importar Configuración"
+  },
+  "importDescription": {
+    "message": "Selecciona un archivo JSON para importar tu configuración."
+  },
+  "exportTitle": {
+    "message": "Exportar Configuración"
+  },
+  "exportDescription": {
+    "message": "Descarga tu configuración actual como archivo JSON."
+  },
+  "exportButton": {
+    "message": "Exportar Configuración"
+  },
+  "importModeLabel": {
+    "message": "Modo de importación:"
+  },
+  "importModeReplace": {
+    "message": "Reemplazar todo"
+  },
+  "importModeMerge": {
+    "message": "Fusionar (mantener existentes)"
+  },
+  "importModeUserAgentsOnly": {
+    "message": "Solo User-Agents"
+  },
+  "importModeSpoofOnly": {
+    "message": "Solo Spoofs Permanentes"
+  },
+  "importModeReplaceDesc": {
+    "message": "Reemplaza toda la configuración con la del archivo"
+  },
+  "importModeMergeDesc": {
+    "message": "Añade nuevos elementos sin eliminar los existentes"
+  },
+  "importModeUserAgentsOnlyDesc": {
+    "message": "Solo importa la lista de User-Agents"
+  },
+  "importModeSpoofOnlyDesc": {
+    "message": "Solo importa los Spoofs Permanentes"
+  },
+  "dragDropText": {
+    "message": "Arrastra y suelta un archivo JSON aquí"
+  },
+  "orText": {
+    "message": "o"
+  },
+  "selectFileButton": {
+    "message": "Seleccionar Archivo"
+  },
+  "confirmImportButton": {
+    "message": "Confirmar Importación"
+  },
+  "versionLabel": {
+    "message": "Versión"
+  },
+  "exportDateLabel": {
+    "message": "Fecha de exportación"
+  },
+  "userAgentsCountLabel": {
+    "message": "User-Agents"
+  },
+  "permanentSpoofCountLabel": {
+    "message": "Spoofs Permanentes"
+  },
+  "importSuccess": {
+    "message": "Configuración importada correctamente"
+  },
+  "exportSuccess": {
+    "message": "Configuración exportada correctamente"
+  },
+  "invalidFileType": {
+    "message": "Por favor, selecciona un archivo JSON válido"
+  },
+  "importErrorInvalidFormat": {
+    "message": "El archivo no tiene un formato válido"
+  },
+  "importErrorReadFile": {
+    "message": "Error al leer el archivo. Asegúrate de que sea un JSON válido."
   }
 }
