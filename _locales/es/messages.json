@@ -215,7 +215,7 @@
     "message": "Seleccionar User-Agent:"
   },
   "selectUserAgentOption": {
-    "message": "-- Selecciona un User-Agent --"
+    "message": "Selecciona un User-Agent"
   },
   "userAgentPreview": {
     "message": "Vista previa del User-Agent:"

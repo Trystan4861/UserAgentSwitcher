@@ -510,7 +510,7 @@ function setupUserAgentSelector(userAgents) {
   // Add default option
   const defaultOption = document.createElement('option');
   defaultOption.value = '';
-  defaultOption.textContent = i18n.getMessage('selectUserAgentOption') || '-- Selecciona un User-Agent --';
+  defaultOption.textContent = i18n.getMessage('selectUserAgentOption') || 'Selecciona un User-Agent';
   select.appendChild(defaultOption);
 
   // Add all user agents (except default)
