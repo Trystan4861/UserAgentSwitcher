@@ -32,6 +32,7 @@ const getDefaultUserAgents = () => [
 // Initialize - wait for i18n to be ready
 document.addEventListener('DOMContentLoaded', async () => {
   await i18n.ready;
+  loadExtensionVersion();
   await initializeUserAgents();
   await updateDefaultUserAgentTranslation();
   await loadUserAgents();
@@ -41,6 +42,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   await setupImportExport();
   setupEventListeners();
 });
+
+// Load and display extension version
+function loadExtensionVersion() {
+  const manifest = chrome.runtime.getManifest();
+  const versionElement = document.getElementById('extensionVersion');
+  if (versionElement) {
+    versionElement.textContent = `v${manifest.version}`;
+  }
+}
 
 // Initialize default user-agents if none exist
 async function initializeUserAgents() {
@@ -375,30 +385,55 @@ async function deleteUserAgent(id) {
 
 // Show notification
 function showNotification(message, type = 'info') {
+  // Remove any existing notifications first
+  const existing = document.querySelectorAll('.custom-notification');
+  existing.forEach(n => n.remove());
+  
+  // Define colors and icons for each type
+  const styles = {
+    success: { bg: '#34a853', icon: '✅' },
+    error: { bg: '#d93025', icon: '⚠️' },
+    info: { bg: '#1a73e8', icon: 'ℹ️' },
+    warning: { bg: '#fbbc04', icon: '⚠️' }
+  };
+  
+  const style = styles[type] || styles.info;
+  
   // Create notification element
   const notification = document.createElement('div');
+  notification.className = 'custom-notification';
   notification.style.cssText = `
     position: fixed;
     top: 20px;
     right: 20px;
     padding: 16px 24px;
-    background: ${type === 'success' ? '#34a853' : '#1a73e8'};
+    background: ${style.bg};
     color: white;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     z-index: 10000;
     animation: slideIn 0.3s ease;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 400px;
+    word-wrap: break-word;
   `;
-  notification.textContent = message;
+  
+  notification.innerHTML = `
+    <span style="font-size: 20px;">${style.icon}</span>
+    <span>${message}</span>
+  `;
   
   document.body.appendChild(notification);
   
-  // Remove after 3 seconds
+  // Remove after 4 seconds
   setTimeout(() => {
     notification.style.animation = 'slideOut 0.3s ease';
     setTimeout(() => notification.remove(), 300);
-  }, 3000);
+  }, 4000);
 }
 
 // Add animations
@@ -638,18 +673,23 @@ async function setupImportExport() {
     
     try {
       const text = await file.text();
+      
+      // Add a small delay to ensure file is fully loaded
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       const data = JSON.parse(text);
       
       // Validate and show preview
       if (validateImportData(data)) {
         showImportPreview(data);
       } else {
-        showImportError('El archivo no tiene un formato válido');
+        showNotification(i18n.getMessage('importErrorInvalidFormat') || 'El archivo no tiene un formato válido', 'error');
         importFile.value = '';
         selectedFileName.textContent = '';
       }
     } catch (error) {
-      showImportError('Error al leer el archivo. Asegúrate de que sea un JSON válido.');
+      console.error('Import error:', error);
+      showNotification(i18n.getMessage('importErrorReadFile') || 'Error al leer el archivo. Asegúrate de que sea un JSON válido.', 'error');
       importFile.value = '';
       selectedFileName.textContent = '';
     }

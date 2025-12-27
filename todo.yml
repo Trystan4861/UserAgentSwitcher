@@ -8,6 +8,28 @@ project_info:
   created: 2025-12-26
   status: planning
 
+notes: |
+  - Todas las tareas deben mantener el estilo visual actual de la extensión
+  - Las tareas se deben completar en el orden indicado, respetando dependencias
+  - Tras realizar una tarea se debe indicar "tarea realizada" al usuario y esperar validación de la misma
+  - Una vez recibida validación de la tarea, proceder a crear el commit de la misma siguiendo las consideraciones descritas a continuación
+  - Los commits deben seguir la convención de mensajes de commit (tipo: descripción breve)
+    - Ejemplo: {ICONO} {ACTION}: {DESCRIPTION}
+      - ICONO: 🎨 (estilo), 🐛 (bug), ✨ (nueva funcionalidad), 🔥 (eliminación), 📝 (documentación), etc.
+      - ACTION: add, fix, update, remove, refactor, docs, test, chore, enhancement, etc.
+      - DESCRIPTION: Descripción clara y concisa del cambio realizado.
+      - Ejemplo de commit: "✨ add: Permanent Spoof List section with UI and storage"
+  - Estamos creando una extensión para chrome, no se puede ni probar usando llamadas "start" ni "chrome" ni usar puppeteer ni similares, sólo el usuario tiene la posiblidad de realizar las pruebas pertinentes y hay que esperar su feedback
+  - La funcionalidad existente no debe verse afectada
+  - Se debe priorizar la experiencia de usuario (UX)
+  - El código debe ser mantenible y bien documentado
+  - Las pruebas son críticas antes de considerar cualquier tarea completa
+  - La internacionalización debe ser completa (español e inglés)
+  - Solo formato JSON para import/export (NO XML)
+  - Tras cada tarea completada generar un commit detallado en git, usando mensajes claros y descriptivos.
+  - Tras finalizar todas las tareas crear un ChangeLog detallado con todos los cambios realizados en la versión 1.0.1, actualizando los manifest y demás archivos necesarios.
+
+
 tasks:
   # ============================================================================
   # FASE 1: ESTRUCTURA Y NAVEGACIÓN
@@ -408,6 +430,27 @@ tasks:
     estimated_hours: 2
     dependencies: [2]
     status: pending
+  
+  - id: 11.1
+    name: Agregar badge de versión en sección About
+    description: |
+      Implementar un badge visual que muestre la versión de la extensión en la sección About:
+      
+      Implementación:
+      - Agregar badge de versión junto al crédito del autor en options.html
+      - El badge debe mostrar la versión desde manifest.json
+      - Diseño consistente con el estilo de la extensión
+      - Badge con estilo visual atractivo (fondo azul claro, borde, padding)
+      
+      Archivos modificados:
+      - options.html: Agregar elemento span con clase "version-badge"
+      - options.css: Estilos para .version-badge
+      - options.js: Función para cargar y mostrar la versión desde manifest.json
+    priority: low
+    estimated_hours: 0.5
+    dependencies: [2]
+    status: completed
+    completed_date: 2025-12-27
 
   # ============================================================================
   # FASE 6: INTERNACIONALIZACIÓN
@@ -750,19 +793,3 @@ summary:
     - name: "Fase 8: Documentación y Finalización"
       tasks: [18, 19, 20, 21, 22]
       hours: 8
-
-notes: |
-  - Todas las tareas deben mantener el estilo visual actual de la extensión
-  - La funcionalidad existente no debe verse afectada
-  - Se debe priorizar la experiencia de usuario (UX)
-  - El código debe ser mantenible y bien documentado
-  - Las pruebas son críticas antes de considerar cualquier tarea completa
-  - La internacionalización debe ser completa (español e inglés)
-  - Solo formato JSON para import/export (NO XML)
-  - Tras cada tarea completada generar un commit detallado en git, usando mensajes claros y descriptivos.
-  - Los commits deben seguir la convención de mensajes de commit (tipo: descripción breve)
-    - Ejemplo: {ICONO} {ACTION}: {DESCRIPTION}
-      - ICONO: 🎨 (estilo), 🐛 (bug), ✨ (nueva funcionalidad), 🔥 (eliminación), 📝 (documentación), etc.
-      - ACTION: add, fix, update, remove, refactor, docs, test, chore, enhancement, etc.
-      - DESCRIPTION: Descripción clara y concisa del cambio realizado.
-  - Tras finalizar todas las tareas crear un ChangeLog detallado con todos los cambios realizados en la versión 1.0.1, actualizando los manifest y demás archivos necesarios.
